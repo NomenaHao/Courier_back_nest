@@ -158,6 +158,7 @@ export class AuthService {
     if (dto.username !== undefined) user.username = dto.username;
     if (dto.phone !== undefined) user.phone = dto.phone;
     if (dto.email !== undefined) user.email = dto.email;
+    if (dto.password) user.password = hashDjangoPassword(dto.password);
     await this.users.save(user);
     return serializeUser(user);
   }

@@ -154,6 +154,8 @@ let AuthService = class AuthService {
             user.phone = dto.phone;
         if (dto.email !== undefined)
             user.email = dto.email;
+        if (dto.password)
+            user.password = (0, django_password_1.hashDjangoPassword)(dto.password);
         await this.users.save(user);
         return (0, order_serializer_1.serializeUser)(user);
     }

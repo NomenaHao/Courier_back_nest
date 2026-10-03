@@ -15,6 +15,7 @@ export declare class ProfileUpdateDto {
     username?: string;
     phone?: string;
     email?: string;
+    password?: string;
 }
 export declare class AdminUserUpdateDto {
     username?: string;

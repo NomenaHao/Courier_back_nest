@@ -65,6 +65,7 @@ class ProfileUpdateDto {
     username;
     phone;
     email;
+    password;
 }
 exports.ProfileUpdateDto = ProfileUpdateDto;
 __decorate([
@@ -82,6 +83,12 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ProfileUpdateDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(6),
+    __metadata("design:type", String)
+], ProfileUpdateDto.prototype, "password", void 0);
 class AdminUserUpdateDto {
     username;
     phone;
