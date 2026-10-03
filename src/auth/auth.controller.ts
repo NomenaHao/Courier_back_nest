@@ -1,14 +1,23 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, ProfileUpdateDto, RefreshDto, RegisterDto } from './auth.dto';
+import {
+  AdminUserUpdateDto,
+  LoginDto,
+  ProfileUpdateDto,
+  RefreshDto,
+  RegisterDto,
+} from './auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AdminGuard } from '../common/admin.guard';
 import { User } from '../entities/user.entity';
@@ -43,6 +52,27 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   listClients() {
     return this.auth.listClients();
+  }
+
+  @Get('users/')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  listUsers() {
+    return this.auth.listUsers();
+  }
+
+  @Patch('users/:id/')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: AdminUserUpdateDto,
+  ) {
+    return this.auth.updateUser(id, dto);
+  }
+
+  @Delete('users/:id/')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.auth.deleteUser(id);
   }
 
   @Get('profile/')

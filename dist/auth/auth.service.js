@@ -105,6 +105,48 @@ let AuthService = class AuthService {
         });
         return list.map(order_serializer_1.serializeUser);
     }
+    async listUsers() {
+        const list = await this.users.find({ order: { username: 'ASC' } });
+        return list.map(order_serializer_1.serializeUser);
+    }
+    async updateUser(id, dto) {
+        const user = await this.users.findOne({ where: { id } });
+        if (!user)
+            throw new common_1.NotFoundException();
+        if (dto.username !== undefined && dto.username !== user.username) {
+            const exists = await this.users.findOne({ where: { username: dto.username } });
+            if (exists) {
+                throw new common_1.BadRequestException({ username: ['Ce nom existe déjà.'] });
+            }
+            user.username = dto.username;
+        }
+        if (dto.phone !== undefined)
+            user.phone = dto.phone;
+        if (dto.email !== undefined)
+            user.email = dto.email;
+        if (dto.role !== undefined) {
+            user.role = dto.role;
+            user.isStaff = dto.role === 'admin';
+        }
+        if (dto.password)
+            user.password = (0, django_password_1.hashDjangoPassword)(dto.password);
+        await this.users.save(user);
+        return (0, order_serializer_1.serializeUser)(user);
+    }
+    async deleteUser(id) {
+        const user = await this.users.findOne({ where: { id } });
+        if (!user)
+            throw new common_1.NotFoundException();
+        try {
+            await this.users.delete(id);
+        }
+        catch {
+            throw new common_1.BadRequestException({
+                detail: ['Impossible de supprimer ce compte (données liées).'],
+            });
+        }
+        return { message: 'Utilisateur supprimé' };
+    }
     async updateProfile(user, dto) {
         if (dto.username !== undefined)
             user.username = dto.username;

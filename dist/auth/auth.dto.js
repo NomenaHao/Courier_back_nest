@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProfileUpdateDto = exports.RefreshDto = exports.LoginDto = exports.RegisterDto = void 0;
+exports.AdminUserUpdateDto = exports.ProfileUpdateDto = exports.RefreshDto = exports.LoginDto = exports.RegisterDto = void 0;
 const class_validator_1 = require("class-validator");
 class RegisterDto {
     username;
@@ -82,4 +82,38 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ProfileUpdateDto.prototype, "email", void 0);
+class AdminUserUpdateDto {
+    username;
+    phone;
+    email;
+    role;
+    password;
+}
+exports.AdminUserUpdateDto = AdminUserUpdateDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AdminUserUpdateDto.prototype, "username", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AdminUserUpdateDto.prototype, "phone", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AdminUserUpdateDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsIn)(['client', 'livreur', 'admin']),
+    __metadata("design:type", String)
+], AdminUserUpdateDto.prototype, "role", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(6),
+    __metadata("design:type", String)
+], AdminUserUpdateDto.prototype, "password", void 0);
 //# sourceMappingURL=auth.dto.js.map

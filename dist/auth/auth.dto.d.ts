@@ -16,3 +16,10 @@ export declare class ProfileUpdateDto {
     phone?: string;
     email?: string;
 }
+export declare class AdminUserUpdateDto {
+    username?: string;
+    phone?: string;
+    email?: string;
+    role?: string;
+    password?: string;
+}

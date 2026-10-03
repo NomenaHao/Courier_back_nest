@@ -39,6 +39,15 @@ let AuthController = class AuthController {
     listClients() {
         return this.auth.listClients();
     }
+    listUsers() {
+        return this.auth.listUsers();
+    }
+    updateUser(id, dto) {
+        return this.auth.updateUser(id, dto);
+    }
+    deleteUser(id) {
+        return this.auth.deleteUser(id);
+    }
     profile(req) {
         return (0, order_serializer_1.serializeUser)(req.user);
     }
@@ -82,6 +91,30 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "listClients", null);
+__decorate([
+    (0, common_1.Get)('users/'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, admin_guard_1.AdminGuard),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "listUsers", null);
+__decorate([
+    (0, common_1.Patch)('users/:id/'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, admin_guard_1.AdminGuard),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, auth_dto_1.AdminUserUpdateDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "updateUser", null);
+__decorate([
+    (0, common_1.Delete)('users/:id/'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, admin_guard_1.AdminGuard),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "deleteUser", null);
 __decorate([
     (0, common_1.Get)('profile/'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

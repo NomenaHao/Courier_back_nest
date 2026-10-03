@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { LoginDto, ProfileUpdateDto, RegisterDto } from './auth.dto';
+import { AdminUserUpdateDto, LoginDto, ProfileUpdateDto, RegisterDto } from './auth.dto';
 export declare class AuthService {
     private users;
     private jwt;
@@ -45,6 +45,23 @@ export declare class AuthService {
         email: string;
         role: string;
     }[]>;
+    listUsers(): Promise<{
+        id: number;
+        username: string;
+        phone: string;
+        email: string;
+        role: string;
+    }[]>;
+    updateUser(id: number, dto: AdminUserUpdateDto): Promise<{
+        id: number;
+        username: string;
+        phone: string;
+        email: string;
+        role: string;
+    }>;
+    deleteUser(id: number): Promise<{
+        message: string;
+    }>;
     updateProfile(user: User, dto: ProfileUpdateDto): Promise<{
         id: number;
         username: string;

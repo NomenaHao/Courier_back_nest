@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -11,7 +12,12 @@ import {
   hashDjangoPassword,
   verifyDjangoPassword,
 } from '../common/django-password';
-import { LoginDto, ProfileUpdateDto, RegisterDto } from './auth.dto';
+import {
+  AdminUserUpdateDto,
+  LoginDto,
+  ProfileUpdateDto,
+  RegisterDto,
+} from './auth.dto';
 import { serializeUser } from '../orders/order.serializer';
 
 @Injectable()
@@ -105,6 +111,47 @@ export class AuthService {
       order: { username: 'ASC' },
     });
     return list.map(serializeUser);
+  }
+
+  async listUsers() {
+    const list = await this.users.find({ order: { username: 'ASC' } });
+    return list.map(serializeUser);
+  }
+
+  async updateUser(id: number, dto: AdminUserUpdateDto) {
+    const user = await this.users.findOne({ where: { id } });
+    if (!user) throw new NotFoundException();
+
+    if (dto.username !== undefined && dto.username !== user.username) {
+      const exists = await this.users.findOne({ where: { username: dto.username } });
+      if (exists) {
+        throw new BadRequestException({ username: ['Ce nom existe déjà.'] });
+      }
+      user.username = dto.username;
+    }
+    if (dto.phone !== undefined) user.phone = dto.phone;
+    if (dto.email !== undefined) user.email = dto.email;
+    if (dto.role !== undefined) {
+      user.role = dto.role;
+      user.isStaff = dto.role === 'admin';
+    }
+    if (dto.password) user.password = hashDjangoPassword(dto.password);
+
+    await this.users.save(user);
+    return serializeUser(user);
+  }
+
+  async deleteUser(id: number) {
+    const user = await this.users.findOne({ where: { id } });
+    if (!user) throw new NotFoundException();
+    try {
+      await this.users.delete(id);
+    } catch {
+      throw new BadRequestException({
+        detail: ['Impossible de supprimer ce compte (données liées).'],
+      });
+    }
+    return { message: 'Utilisateur supprimé' };
   }
 
   async updateProfile(user: User, dto: ProfileUpdateDto) {

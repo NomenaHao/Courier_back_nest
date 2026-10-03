@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { LoginDto, ProfileUpdateDto, RefreshDto, RegisterDto } from './auth.dto';
+import { AdminUserUpdateDto, LoginDto, ProfileUpdateDto, RefreshDto, RegisterDto } from './auth.dto';
 import { User } from '../entities/user.entity';
 export declare class AuthController {
     private auth;
@@ -42,6 +42,23 @@ export declare class AuthController {
         email: string;
         role: string;
     }[]>;
+    listUsers(): Promise<{
+        id: number;
+        username: string;
+        phone: string;
+        email: string;
+        role: string;
+    }[]>;
+    updateUser(id: number, dto: AdminUserUpdateDto): Promise<{
+        id: number;
+        username: string;
+        phone: string;
+        email: string;
+        role: string;
+    }>;
+    deleteUser(id: number): Promise<{
+        message: string;
+    }>;
     profile(req: {
         user: User;
     }): {

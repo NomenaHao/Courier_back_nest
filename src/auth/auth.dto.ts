@@ -46,3 +46,26 @@ export class ProfileUpdateDto {
   @IsString()
   email?: string;
 }
+
+export class AdminUserUpdateDto {
+  @IsOptional()
+  @IsString()
+  username?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  email?: string;
+
+  @IsOptional()
+  @IsIn(['client', 'livreur', 'admin'])
+  role?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(6)
+  password?: string;
+}
